@@ -6,8 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
+    public function indexAction($count, $firstName)
     {
-        return $this->render('EventBundle:Default:index.html.twig', array('name' => $name));
+        $templating = $this->container->get('templating');
+
+        return $this->render('EventBundle:Default:index.html.twig', array(
+            'name' => $firstName,
+            'count' => $count,
+        ));
+
     }
 }
