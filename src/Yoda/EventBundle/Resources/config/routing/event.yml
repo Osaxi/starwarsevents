@@ -1,3 +1,7 @@
+event:
+    pattern:  /
+    defaults: { _controller: "EventBundle:Event:index" }
+
 event_show:
     pattern:  /{id}/show
     defaults: { _controller: "EventBundle:Event:show" }
