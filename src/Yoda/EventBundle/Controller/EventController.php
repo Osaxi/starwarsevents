@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Yoda\EventBundle\Entity\Event;
 use Yoda\EventBundle\Form\EventType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
  * Event controller.
@@ -17,6 +19,8 @@ class EventController extends Controller
     /**
      * Lists all Event entities.
      *
+     * @Template()
+     * @Route("/")
      */
     public function indexAction()
     {
@@ -24,9 +28,9 @@ class EventController extends Controller
 
         $entities = $em->getRepository('EventBundle:Event')->findAll();
 
-        return $this->render('EventBundle:Event:index.html.twig', array(
+        return array(
             'entities' => $entities,
-        ));
+        );
     }
 
     /**
