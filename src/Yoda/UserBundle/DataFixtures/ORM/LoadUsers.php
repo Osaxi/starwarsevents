@@ -24,7 +24,9 @@ class LoadEventData implements FixtureInterface, ContainerAwareInterface
 
         $admin = new User();
         $admin->setUsername('admin');
-        $admin->setPassword($this->encodePassword($admin, 'user'));
+        $admin->setPassword($this->encodePassword($admin, 'admin'));
+        $admin->setRoles(array('ROLE_ADMIN'));
+        $admin->setIsActive(true);
         $manager->persist($admin);
 
         // The queries aren't done until now.
