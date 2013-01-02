@@ -23,7 +23,7 @@ class LoadEventData implements FixtureInterface, ContainerAwareInterface
         $manager->persist($user);
 
         $admin = new User();
-        $$admin->setUsername('admin');
+        $admin->setUsername('admin');
         $admin->setPassword($this->encodePassword($admin, 'user'));
         $manager->persist($admin);
 
