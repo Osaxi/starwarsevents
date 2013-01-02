@@ -67,6 +67,8 @@ class User implements AdvancedUserInterface, Serializable
      */
     private $email;
 
+    private $plainPassword;
+
     public function __construct()
     {
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -167,6 +169,7 @@ class User implements AdvancedUserInterface, Serializable
 
     public function eraseCredentials()
     {
+        $this->setPlainPassword(null);
     }
 
     /**
@@ -282,6 +285,16 @@ class User implements AdvancedUserInterface, Serializable
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
     }
 
 
