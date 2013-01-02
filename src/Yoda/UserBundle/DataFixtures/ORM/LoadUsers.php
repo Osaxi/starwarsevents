@@ -20,13 +20,14 @@ class LoadEventData implements FixtureInterface, ContainerAwareInterface
         $user = new User();
         $user->setUsername('user');
         $user->setPassword($this->encodePassword($user, 'user'));
+        $user->setEmail('user@user.com');
         $manager->persist($user);
 
         $admin = new User();
         $admin->setUsername('admin');
         $admin->setPassword($this->encodePassword($admin, 'admin'));
         $admin->setRoles(array('ROLE_ADMIN'));
-        $admin->setIsActive(true);
+        $admin->setEmail('admin@admin.com');
         $manager->persist($admin);
 
         // The queries aren't done until now.

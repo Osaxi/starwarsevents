@@ -60,6 +60,13 @@ class User implements AdvancedUserInterface, Serializable
      */
     private $isActive = true;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
     public function __construct()
     {
         $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -265,6 +272,16 @@ class User implements AdvancedUserInterface, Serializable
         $data = unserialize($serialized);
 
         $this->id = $data['id'];
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
     }
 
 
