@@ -3,7 +3,6 @@
 namespace Yoda\EventBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Yoda\EventBundle\Entity\Event;
 use Yoda\EventBundle\Form\EventType;
@@ -79,6 +78,8 @@ class EventController extends Controller
         $form->bind($request);
 
         if ($form->isValid()) {
+            $entity->setOwner($this->getUser());
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -106,6 +107,8 @@ class EventController extends Controller
             throw $this->createNotFoundException('Unable to find Event entity.');
         }
 
+        $this->checkOwnerSecurity($entity);
+
         $editForm = $this->createForm(new EventType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -129,6 +132,8 @@ class EventController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
         }
+
+        $this->checkOwnerSecurity($entity);
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new EventType(), $entity);
@@ -165,6 +170,8 @@ class EventController extends Controller
                 throw $this->createNotFoundException('Unable to find Event entity.');
             }
 
+            $this->checkOwnerSecurity($entity);
+
             $em->remove($entity);
             $em->flush();
         }
@@ -178,5 +185,13 @@ class EventController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+    private function checkOwnerSecurity(Event $event)
+    {
+        $user = $this->getUser();
+        if($user != $event->getOwner()) {
+            throw new AccessDeniedException('You are not the owner!');
+        }
     }
 }

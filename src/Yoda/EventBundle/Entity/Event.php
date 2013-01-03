@@ -3,6 +3,7 @@
 namespace Yoda\EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Yoda\UserBundle\Entity\User;
 
 /**
  * Event
@@ -55,6 +56,12 @@ class Event
      * @ORM\Column(name="details", type="text", nullable=true)
      */
     private $details;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Yoda\UserBundle\Entity\User", cascade={"remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    protected $owner;
 
 
     /**
@@ -180,5 +187,15 @@ class Event
     public function getDetails()
     {
         return $this->details;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner)
+    {
+        $this->owner = $owner;
     }
 }
