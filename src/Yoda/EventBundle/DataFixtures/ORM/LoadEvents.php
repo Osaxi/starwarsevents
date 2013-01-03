@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Yoda\EventBundle\Entity\Event;
 
-class LoadUserData implements FixtureInterface
+class LoadEvents implements FixtureInterface
 {
     /**
      * {@inheritDoc}
