@@ -7,8 +7,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Yoda\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 
-class LoadUsers implements FixtureInterface, ContainerAwareInterface
+class LoadUsers extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     private $container;
 
@@ -22,6 +24,8 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
         $user->setPassword($this->encodePassword($user, 'user'));
         $user->setEmail('user@user.com');
         $manager->persist($user);
+
+        $this->addReference('user-user', $user);
 
         $admin = new User();
         $admin->setUsername('admin');
@@ -48,4 +52,8 @@ class LoadUsers implements FixtureInterface, ContainerAwareInterface
         $this->container = $container;
     }
 
+    public function getOrder()
+    {
+        return 10;
+    }
 }
