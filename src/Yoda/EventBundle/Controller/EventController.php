@@ -8,6 +8,7 @@ use Yoda\EventBundle\Entity\Event;
 use Yoda\EventBundle\Form\EventType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Event controller.
@@ -180,6 +181,81 @@ class EventController extends Controller
         }
 
         return $this->redirect($this->generateUrl('event'));
+    }
+
+    public function attendAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var $event \Yoda\EventBundle\Entity\Event */
+        $event = $em->getRepository('EventBundle:Event')->find($id);
+
+        if(!$event) {
+            throw $this->createNotFoundException('No event found for id '.$id);
+        }
+
+        if(!$event->hasAttendee($this->getUser())) {
+            $event->getAttendees()->add($this->getUser());
+        }
+
+        $em->persist($event);
+        $em->flush();
+
+        if($this->getRequest()->getRequestFormat() == 'json') {
+            return $this->createAttendingJson(true);
+        }
+
+        return $this->redirect($this->generateUrl('event_show', array(
+            'slug' => $event->getSlug()
+        )));
+    }
+
+    public function unattendAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /** @var $event \Yoda\EventBundle\Entity\Event */
+        $event = $em->getRepository('EventBundle:Event')->find($id);
+
+        if(!$event) {
+            throw $this->createNotFoundException('No event found for id '.$id);
+        }
+
+        if($event->hasAttendee($this->getUser())) {
+            $event->getAttendees()->removeElement($this->getUser());
+        }
+
+        $em->persist($event);
+        $em->flush();
+
+        if($this->getRequest()->getRequestFormat() == 'json') {
+            return $this->createAttendingJson(false);
+        }
+
+        if($this->getRequest()->getRequestFormat() == 'json') {
+            $data = array(
+                'attending' => 1
+            );
+
+            $response = new Response(json_encode($data));
+            return $response;
+        }
+
+        return $this->redirect($this->generateUrl('event_show', array(
+            'slug' => $event->getSlug()
+        )));
+    }
+
+    /**
+     * @param bool $attending
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function createAttendingJson($attending)
+    {
+        $data = array(
+            'attending' => $attending
+        );
+
+        $response = new Response(json_encode($data));
+        return $response;
     }
 
     private function createDeleteForm($id)
