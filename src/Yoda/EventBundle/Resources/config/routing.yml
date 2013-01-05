@@ -4,3 +4,7 @@ _default_import:
 EventBundle_event:
     resource: "@EventBundle/Resources/config/routing/event.yml"
     prefix:   /
+
+event_report_updated_events:
+    pattern: /events/report/recentlyUpdated.csv
+    defaults: { _controller: EventBundle:Report:updatedEvents, _format: csv }
