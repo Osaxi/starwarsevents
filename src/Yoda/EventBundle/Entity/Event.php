@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(name="yoda_event")
  * @ORM\Entity(repositoryClass="Yoda\EventBundle\Entity\EventRepository")
+ * @ORM\HasLifeCycleCallbacks()
  */
 class Event
 {
@@ -74,7 +75,6 @@ class Event
     /**
      * @var datetime $created
      *
-     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     private $created;
@@ -286,5 +286,15 @@ class Event
     public function hasAttendee(User $user)
     {
         return $this->getAttendees()->contains($user);
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if(!$this->getCreated()) {
+            $this->setCreated(new \DateTime());
+        }
     }
 }
