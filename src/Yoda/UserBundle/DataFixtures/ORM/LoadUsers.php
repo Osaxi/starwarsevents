@@ -21,7 +21,7 @@ class LoadUsers extends AbstractFixture implements ContainerAwareInterface, Orde
     {
         $user = new User();
         $user->setUsername('user');
-        $user->setPassword($this->encodePassword($user, 'user'));
+        $user->setPlainPassword('user');
         $user->setEmail('user@user.com');
         $manager->persist($user);
 
@@ -29,22 +29,13 @@ class LoadUsers extends AbstractFixture implements ContainerAwareInterface, Orde
 
         $admin = new User();
         $admin->setUsername('admin');
-        $admin->setPassword($this->encodePassword($admin, 'admin'));
+        $admin->setPlainPassword('admin');
         $admin->setRoles(array('ROLE_ADMIN'));
         $admin->setEmail('admin@admin.com');
         $manager->persist($admin);
 
         // The queries aren't done until now.
         $manager->flush();
-    }
-
-    private function encodePassword($user, $plainPassword)
-    {
-        $encoder = $this->container->get('security.encoder_factory')
-            ->getEncoder($user)
-        ;
-
-        return $encoder->encodePassword($plainPassword, $user->getSalt());
     }
 
     public function setContainer(ContainerInterface $container = null)
