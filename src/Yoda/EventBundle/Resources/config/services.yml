@@ -5,3 +5,10 @@ services:
             - "@doctrine.orm.entity_manager"
         calls:
             - [ setLogger, ["@logger"]]
+
+    yoda_event.twig.event_extention:
+        class: Yoda\EventBundle\Twig\EventExtension
+        arguments: []
+        tags:
+            - { name: twig.extension }
+        public: false
