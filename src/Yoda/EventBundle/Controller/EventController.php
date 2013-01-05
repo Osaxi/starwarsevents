@@ -46,7 +46,8 @@ class EventController extends Controller
             ->findOneBy(array('slug' => $slug));
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Event entity.');
+            #throw $this->createNotFoundException('Unable to find Event entity.');
+            throw new \Yoda\EventBundle\Exception\EventNotFoundException();
         }
 
         $deleteForm = $this->createDeleteForm($entity->getId());
@@ -242,6 +243,23 @@ class EventController extends Controller
         return $this->redirect($this->generateUrl('event_show', array(
             'slug' => $event->getSlug()
         )));
+    }
+
+    /**
+     * @Template("EventBundle:Event:_events.html.twig")
+     * @return array
+     */
+    public function _upcomingEventsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('EventBundle:Event')
+            ->getUpcomingEvents()
+        ;
+
+        return array(
+            'entities' => $entities,
+        );
     }
 
     /**
