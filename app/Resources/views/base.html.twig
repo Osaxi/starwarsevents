@@ -11,11 +11,9 @@
         </title>
 
         {% block stylesheets %}
-
-            <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
-
             {% stylesheets
                 'bundles/event/css/*'
+                'bundles/event/css/bootstrap/css/bootstrap.css'
                 filter='?cssmin'
                 output='css/generated/layout.css'
             %}
@@ -35,7 +33,7 @@
         {% block body %}{% endblock %}
         {% block javascripts %}
             <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-            
+
             {% javascripts
                 'bundles/event/js/jquery.blockUI.js'
                 output='js/generated/main.js'
