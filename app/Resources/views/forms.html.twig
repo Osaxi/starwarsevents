@@ -42,3 +42,12 @@
         <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
     {% endspaceless %}
 {% endblock form_label %}
+
+{% block repeated_row %}
+    {% spaceless %}
+        <div class="control-group{{ form.first.vars.errors|length > 0 ? ' error' : '' }}">
+            {{ form_row(form.first, {'label': firstLabel|default}) }}
+            {{ form_row(form.second, {'label': secondLabel|default}) }}
+        </div>
+    {% endspaceless %}
+{% endblock repeated_row %}
