@@ -6,7 +6,7 @@
             <section>
                 <h1>Register</h1>
 
-                <form action="{{ path('user_register') }}" method="POST">
+                <form action="{{ path('user_register') }}" method="POST" class="form-horizontal">
                     {{ form_errors(form) }}
 
                     {{ form_row(form.username) }}
